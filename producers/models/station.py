@@ -16,8 +16,11 @@ class Arrival():
     station_id : int
     train_id: str
     direction: str
+    line : str
+    train_status : str
     prev_station_id : int
     prev_direction : str
+
 
 class Station(Producer):
     """Defines a single station"""
@@ -45,7 +48,7 @@ class Station(Producer):
         # replicas
         #
         #
-        topic_name = f"com.udacity.arrival.{station_name}" # TODO: Come up with a better topic name
+        topic_name = f"com.udacity.arrival.{station_name}" # TODO TM: Come up with a better topic name ***
         super().__init__(
             topic_name,
             key_schema=Station.key_schema,
@@ -75,7 +78,13 @@ class Station(Producer):
             topic=self.topic_name,
             key={"timestamp": self.time_millis()},
             key_schema=Station.key_schema,
-            value=asdict(Arrival(self.station_id, train.train_id, direction, prev_station_id, prev_direction)),
+            value=asdict(Arrival(station_id=self.station_id,
+                                 train_id=train.train_id,
+                                 direction=direction,
+                                 line=self.color.name,
+                                 train_status=train.status.name,
+                                 prev_station_id= prev_station_id,
+                                 prev_direction=prev_direction)),
             value_schema=Station.value_schema
         )
 

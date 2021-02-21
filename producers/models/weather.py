@@ -13,6 +13,7 @@ from models.producer import Producer
 
 logger = logging.getLogger(__name__)
 
+HOSTNAME = 'DESKTOP-MRAIJ7J'
 
 class Weather(Producer):
     """Defines a simulated weather model"""
@@ -21,7 +22,7 @@ class Weather(Producer):
         "status", "sunny partly_cloudy cloudy windy precipitation", start=0
     )
 
-    rest_proxy_url = "http://localhost:8082"
+    rest_proxy_url = f"http://{HOSTNAME}:8082"
 
     key_schema = None
     value_schema = None
