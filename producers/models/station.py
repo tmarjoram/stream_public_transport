@@ -74,19 +74,24 @@ class Station(Producer):
         #
         #
         # logger.info("arrival kafka integration incomplete - skipping")
-        self.producer.produce(
-            topic=self.topic_name,
-            key={"timestamp": self.time_millis()},
-            key_schema=Station.key_schema,
-            value=asdict(Arrival(station_id=self.station_id,
-                                 train_id=train.train_id,
-                                 direction=direction,
-                                 line=self.color.name,
-                                 train_status=train.status.name,
-                                 prev_station_id= prev_station_id,
-                                 prev_direction=prev_direction)),
-            value_schema=Station.value_schema
-        )
+        try :
+            self.producer.produce(
+                topic=self.topic_name,
+                key={"timestamp": self.time_millis()},
+                key_schema=Station.key_schema,
+                value=asdict(Arrival(station_id=self.station_id,
+                                     train_id=train.train_id,
+                                     direction=direction,
+                                     line=self.color.name,
+                                     train_status=train.status.name,
+                                     prev_station_id= prev_station_id,
+                                     prev_direction=prev_direction)),
+                value_schema=Station.value_schema
+            )
+        except Exception as e :
+
+            logger.error(e)
+            raise
 
     def __str__(self):
         return "Station | {:^5} | {:<30} | Direction A: | {:^5} | departing to {:<30} | Direction B: | {:^5} | departing to {:<30} | ".format(
