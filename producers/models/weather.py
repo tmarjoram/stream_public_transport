@@ -29,7 +29,7 @@ class Weather(Producer):
 
     winter_months = set((0, 1, 2, 3, 10, 11))
     summer_months = set((6, 7, 8))
-    topic_name = f"org.chicago.cta.weather.v1"  # TODO: Come up with a better topic name
+    topic_name = f"org.chicago.cta.weather.v1"
 
     def __init__(self, month):
 
@@ -37,21 +37,14 @@ class Weather(Producer):
             with open(f"{Path(__file__).parents[0]}/schemas/weather_key.json") as f:
                 Weather.key_schema = json.load(f)
 
-        #
-        # TODO: Define this value schema in `schemas/weather_value.json
-        #
+
         if Weather.value_schema is None:
             with open(f"{Path(__file__).parents[0]}/schemas/weather_value.json") as f:
                 Weather.value_schema = json.load(f)
 
-        #
-        #
-        # TODO: Complete the below by deciding on a topic name, number of partitions, and number of
-        # replicas
-        #
-        #
+
         super().__init__(
-            self.topic_name, # TODO: Come up with a better topic name
+            self.topic_name,
             key_schema=Weather.key_schema,
             value_schema=Weather.value_schema,
             num_partitions=5,
@@ -82,24 +75,14 @@ class Weather(Producer):
 
         #
         #
-        # TODO: Complete the function by posting a weather event to REST Proxy. Make sure to
+        # Complete the function by posting a weather event to REST Proxy. Make sure to
         # specify the Avro schemas and verify that you are using the correct Content-Type header.
         #
         #
         resp = requests.post(
-           #
-           #
-           # TODO: What URL should be POSTed to?
-           #
-           #
            f"{Weather.rest_proxy_url}/topics/{self.topic_name}",
-           #
-           #
-           # TODO: What Headers need to bet set?
-           #
-           #
-        headers={"Content-Type": "application/vnd.kafka.avro.v2+json",  "Accept": "application/vnd.kafka.v2+json"},
-        data=json.dumps(
+            headers={"Content-Type": "application/vnd.kafka.avro.v2+json",  "Accept": "application/vnd.kafka.v2+json"},
+            data=json.dumps(
                 {
                     "key_schema": json.dumps(Weather.key_schema),
                     "value_schema": json.dumps(Weather.value_schema),
