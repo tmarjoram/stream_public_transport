@@ -43,7 +43,7 @@ class Turnstile(Producer):
         # replicas
         #
         #
-        topic_name = f"com.udacity.turnstile.{station_name}" # TODO: Come up with a better topic name
+        topic_name = f"org.chicago.cta.turnstile.v1" # TODO: Come up with a better topic name
 
         super().__init__(
             topic_name, # TODO: Come up with a better topic name

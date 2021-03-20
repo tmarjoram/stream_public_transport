@@ -29,7 +29,7 @@ class Weather(Producer):
 
     winter_months = set((0, 1, 2, 3, 10, 11))
     summer_months = set((6, 7, 8))
-    topic_name = f"com.udacity.weather"  # TODO: Come up with a better topic name
+    topic_name = f"org.chicago.cta.weather.v1"  # TODO: Come up with a better topic name
 
     def __init__(self, month):
 
@@ -112,7 +112,6 @@ class Weather(Producer):
         except:
             print(f"Failed to send data to REST Proxy {json.dumps(resp.json(), indent=2)}")
             raise
-        print(f"Sent data to REST Proxy {json.dumps(resp.json(), indent=2)}")
 
 
         logger.debug(

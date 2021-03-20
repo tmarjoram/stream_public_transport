@@ -35,12 +35,12 @@ class TransformedStation(faust.Record):
 app = faust.App("stations-stream", broker=f"kafka://{HOSTNAME}:9092", store="memory://")
 
 #TODO: Define the input Kafka Topic. Hint: What topic did Kafka Connect output to?
-topic = app.topic("com.udacity.connect-stations", value_type=Station)
+topic = app.topic("org.chicago.cta.connect-stations", value_type=Station)
 #TODO: Define the output Kafka Topic
-out_topic = app.topic("com.udacity.stations.transformed", partitions=1, value_type=TransformedStation)
+out_topic = app.topic("org.chicago.cta.stations.table.v1", partitions=1, value_type=TransformedStation)
 #TODO: Define a Faust Table
 table = app.Table(
-   "station_aggregation",
+   "org.chicago.cta.stations.table.v1",
    default=TransformedStation,
    partitions=1,
    changelog_topic=out_topic,
@@ -57,7 +57,7 @@ table = app.Table(
 #
 @app.agent(topic)
 async def station_event(stationevents):
-    async for stationevent in stationevents:
+    async for stationevent in stationevents : #.group_by(Station.station_id):
 
         color = "red" if stationevent.red else "blue" if stationevent.blue else "green" if stationevent.green else None
         transformed_station = TransformedStation(station_id=stationevent.station_id,
@@ -66,6 +66,8 @@ async def station_event(stationevents):
                                                  line=color)
 
         table[stationevent.station_id] = transformed_station
+
+        print(transformed_station)
 
 
 

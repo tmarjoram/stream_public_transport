@@ -48,7 +48,7 @@ class Station(Producer):
         # replicas
         #
         #
-        topic_name = f"com.udacity.arrival.{station_name}" # TODO TM: Come up with a better topic name ***
+        topic_name = f"org.chicago.cta.station.arrivals.{station_name}" # TODO TM: Come up with a better topic name ***
         super().__init__(
             topic_name,
             key_schema=Station.key_schema,

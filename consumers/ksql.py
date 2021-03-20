@@ -9,8 +9,9 @@ import topic_check
 
 logger = logging.getLogger(__name__)
 
+HOSTNAME = 'DESKTOP-MRAIJ7J'
 
-KSQL_URL = "http://localhost:8088"
+KSQL_URL = f"http://{HOSTNAME}:8088"
 
 #
 # TODO: Complete the following KSQL statements.
@@ -21,16 +22,20 @@ KSQL_URL = "http://localhost:8088"
 #       Make sure to cast the COUNT of station id to `count`
 #       Make sure to set the value format to JSON
 
+
 KSQL_STATEMENT = """
-CREATE TABLE turnstile (
-    ???
-) WITH (
-    ???
-);
+CREATE TABLE turnstile   
+(station_id INT, station_name VARCHAR,  line VARCHAR)   
+WITH (KAFKA_TOPIC='org.chicago.cta.turnstile.v1',         
+      VALUE_FORMAT='AVRO',         
+KEY='station_name');
 
 CREATE TABLE turnstile_summary
-WITH (???) AS
-    ???
+WITH (KAFKA_TOPIC='TURNSTILE_SUMMARY',         
+      VALUE_FORMAT='JSON') AS
+   select station_id, count(station_id) as count
+   from turnstile
+   group by station_id;
 """
 
 
